@@ -3,12 +3,12 @@
 #include "config.h"
 #include "Interface/SimpleButton.h"
 #include "Interface/Display.h"
+#include "Data/Plants.h"
 
 class App
 {
 public:
     App();
-    // App(Display *display);
 
     void Run();
 
@@ -18,4 +18,14 @@ private:
     SimpleButton m_btn2;
 
     Display m_display;
+
+    int pageIndex = 0;
+
+private:
+    void NextPage();
+    void PreviousPage();
+
+    void ChangePageIndex(int newIndex);
+
+    void LoadPage(int index);
 };

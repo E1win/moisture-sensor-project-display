@@ -13,6 +13,7 @@ public:
     void Reset();
 
     void DrawPlantPage(int id, int percentage, int threshold);
+    void DrawBarWithThreshold(int id, int row, int percentage, int threshold);
 
 private:
     TFT_eSPI m_tft;

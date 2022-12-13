@@ -11,9 +11,7 @@ void App::Run()
 
     m_display.Init();
 
-    int testPercentage = 50;
-    int testThreshold = 20;
-    m_display.DrawPlantPage(0, testPercentage, testThreshold);
+    Plants::Init();
 
     while (true)
     {
@@ -21,22 +19,66 @@ void App::Run()
         {
             Serial.println("Button 1 pressed!");
 
-            testPercentage = testPercentage + 5;
-            Serial.println(testPercentage);
-            m_display.DrawPlantPage(0, testPercentage, testThreshold);
-
-            // Show previous page
+            NextPage();
         }
 
         if (m_btn2.IsPressed())
         {
             Serial.println("Button 2 pressed!");
 
-            testPercentage = testPercentage - 5;
-            Serial.println(testPercentage);
-            m_display.DrawPlantPage(0, testPercentage, testThreshold);
-
-            // Show next page
+            PreviousPage();
         }
+    }
+}
+
+////////////////////////////////////
+
+void App::NextPage()
+{
+    ChangePageIndex(pageIndex + 1);
+    LoadPage(pageIndex);
+}
+
+void App::PreviousPage()
+{
+    ChangePageIndex(pageIndex - 1);
+    LoadPage(pageIndex);
+}
+
+void App::LoadPage(int index)
+{
+    if (index == 0)
+    {
+        // LOAD ALL PLANTS PAGE
+        for (int i = 0; i < PLANT_COUNT; i++)
+        {
+            int percentage, threshold;
+
+            Plants::GetPlant(i, &percentage, &threshold);
+            m_display.DrawBarWithThreshold(i, i, percentage, threshold);
+        }
+    }
+    else if (index <= PLANT_COUNT)
+    {
+        int percentage, threshold;
+
+        Plants::GetPlant(index - 1, &percentage, &threshold);
+        m_display.DrawPlantPage(index - 1, percentage, threshold);
+    }
+}
+
+void App::ChangePageIndex(int newIndex)
+{
+    if (newIndex > PLANT_COUNT)
+    {
+        pageIndex = 0;
+    }
+    else if (newIndex < 0)
+    {
+        pageIndex = PLANT_COUNT;
+    }
+    else
+    {
+        pageIndex = newIndex;
     }
 }
