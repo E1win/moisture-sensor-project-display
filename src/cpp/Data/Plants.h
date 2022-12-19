@@ -17,6 +17,8 @@ public:
     static int GetMoisturePercentage(int id);
     static int GetThresholdPercentage(int id);
 
+    static void SetThresholdPercentage(int id, int percentage);
+
 private:
     typedef struct Plant
     {

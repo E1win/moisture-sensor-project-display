@@ -45,3 +45,8 @@ int Plants::GetThresholdPercentage(int id)
 {
     return m_plantArr[id].thresholdPercentage;
 }
+
+void Plants::SetThresholdPercentage(int id, int percentage)
+{
+    m_plantArr[id].thresholdPercentage = percentage;
+}

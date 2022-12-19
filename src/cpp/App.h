@@ -2,6 +2,7 @@
 
 #include "config.h"
 #include "Interface/SimpleButton.h"
+#include "Interface/Potentiometer.h"
 #include "Interface/Display.h"
 #include "Data/Plants.h"
 
@@ -17,15 +18,7 @@ private:
     SimpleButton m_btn1;
     SimpleButton m_btn2;
 
+    Potentiometer m_ptnmtr;
+
     Display m_display;
-
-    int pageIndex = 0;
-
-private:
-    void NextPage();
-    void PreviousPage();
-
-    void ChangePageIndex(int newIndex);
-
-    void LoadPage(int index);
 };

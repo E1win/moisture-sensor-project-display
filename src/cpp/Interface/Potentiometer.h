@@ -8,20 +8,20 @@ class Potentiometer
 public:
     Potentiometer(byte pin);
 
-    void Loop();
-
     int GetValue() const;
 
-    bool IsChanged() const;
+    bool IsChanged();
 
 private:
     byte m_pin;
 
-    int value;
-    int prevValue;
-    int minChange = 100;
+    const static int minChange = 20;
 
-    int valuePercentage;
+    int m_valuePercentage;
 
-    bool hasNewValue = false;
+    bool m_hasNewValue = false;
+
+private:
+    static void Loop(void *params);
+    static int ConvertToPercentage(int num);
 };

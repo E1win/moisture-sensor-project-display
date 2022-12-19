@@ -1,7 +1,8 @@
 #include "App.h"
 
 App::App() : m_btn1(BUTTON1_PIN),
-             m_btn2(BUTTON2_PIN)
+             m_btn2(BUTTON2_PIN),
+             m_ptnmtr(POTENTIOMETER_PIN)
 {
 }
 
@@ -13,72 +14,33 @@ void App::Run()
 
     Plants::Init();
 
+    m_display.ReloadPage();
+
     while (true)
     {
         if (m_btn1.IsPressed())
         {
             Serial.println("Button 1 pressed!");
 
-            NextPage();
+            m_display.LoadNextPage();
         }
 
         if (m_btn2.IsPressed())
         {
             Serial.println("Button 2 pressed!");
 
-            PreviousPage();
+            m_display.LoadPreviousPage();
+        }
+
+        if (m_ptnmtr.IsChanged() && m_display.GetPage() == Display::Plant)
+        {
+
+            Serial.println(m_ptnmtr.GetValue());
+            int plantID = m_display.GetPageIndex();
+            Plants::SetThresholdPercentage(plantID, m_ptnmtr.GetValue());
+            m_display.ReloadPage();
         }
     }
 }
 
 ////////////////////////////////////
-
-void App::NextPage()
-{
-    ChangePageIndex(pageIndex + 1);
-    LoadPage(pageIndex);
-}
-
-void App::PreviousPage()
-{
-    ChangePageIndex(pageIndex - 1);
-    LoadPage(pageIndex);
-}
-
-void App::LoadPage(int index)
-{
-    if (index == 0)
-    {
-        // LOAD ALL PLANTS PAGE
-        for (int i = 0; i < PLANT_COUNT; i++)
-        {
-            int percentage, threshold;
-
-            Plants::GetPlant(i, &percentage, &threshold);
-            m_display.DrawBarWithThreshold(i, i, percentage, threshold);
-        }
-    }
-    else if (index <= PLANT_COUNT)
-    {
-        int percentage, threshold;
-
-        Plants::GetPlant(index - 1, &percentage, &threshold);
-        m_display.DrawPlantPage(index - 1, percentage, threshold);
-    }
-}
-
-void App::ChangePageIndex(int newIndex)
-{
-    if (newIndex > PLANT_COUNT)
-    {
-        pageIndex = 0;
-    }
-    else if (newIndex < 0)
-    {
-        pageIndex = PLANT_COUNT;
-    }
-    else
-    {
-        pageIndex = newIndex;
-    }
-}
