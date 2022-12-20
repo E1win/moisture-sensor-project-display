@@ -3,13 +3,14 @@
 // REMOVE ARDUINO.H WHEN RANDOM IS NO LONGER NECESSARY FOR TEST DATA.
 #include "Arduino.h"
 
+// Native ESP32 library
+#include <Preferences.h>
+
 #include "config.h"
 
 class Plants
 {
 public:
-    Plants();
-
     static void Init();
 
     static void GetPlant(int id, int *outPercentage, int *outThreshold);
@@ -18,16 +19,11 @@ public:
     static int GetThresholdPercentage(int id);
 
     static void SetThresholdPercentage(int id, int percentage);
+    static void SetMoisturePercentage(int id, int percentage);
 
 private:
-    typedef struct Plant
-    {
-        int id;
-        int moisturePercentage;
-        int thresholdPercentage;
-    } Plant;
+    Plants();
 
-    static inline Plant m_plantArr[PLANT_COUNT];
-
-    static inline int m_defaultMoistureThreshold;
+    static void CreateThresholdPercentageKey(int id, char *outKey);
+    static void CreateMoisturePercentageKey(int id, char *outKey);
 };
