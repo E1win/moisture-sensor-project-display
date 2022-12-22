@@ -58,7 +58,6 @@ void Display::LoadNextPage()
     {
     case AllPlants:
         currentPage = Plant;
-        pageIndex = 0;
 
         Reset();
 
@@ -115,6 +114,7 @@ void Display::LoadPage()
     switch (currentPage)
     {
     case AllPlants:
+        pageIndex = 0;
         Reset();
 
         // LOAD ALL PLANTS PAGE
@@ -126,8 +126,6 @@ void Display::LoadPage()
             DrawBarWithThreshold(i, i, percentage, threshold);
         }
 
-        Serial.println("Loaded AllPlants Page at index: ");
-        Serial.println(pageIndex);
         break;
     case Plant:
         int percentage, threshold;
