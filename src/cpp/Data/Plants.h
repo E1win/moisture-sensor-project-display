@@ -26,4 +26,6 @@ private:
 
     static void CreateThresholdPercentageKey(int id, char *outKey);
     static void CreateMoisturePercentageKey(int id, char *outKey);
+
+    static bool IDOutOfRange(int id);
 };

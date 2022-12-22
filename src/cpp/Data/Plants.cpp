@@ -54,10 +54,9 @@ void Plants::Init()
 
 void Plants::GetPlant(int id, int *outPercentage, int *outThreshold)
 {
-    // Check if id is not out of range
-    if (id < 0 || id >= PLANT_COUNT)
+    if (IDOutOfRange(id))
     {
-        Serial.println("Plant ID out of range, given default values");
+        Serial.println("WARNING: Plant ID out of range at GetPlant, given default values (0, 0)");
 
         *outPercentage = 0;
         *outThreshold = 0;
@@ -71,11 +70,23 @@ void Plants::GetPlant(int id, int *outPercentage, int *outThreshold)
 
 int Plants::GetMoisturePercentage(int id)
 {
+    if (IDOutOfRange(id))
+    {
+        Serial.println("WARNING: Plant ID out of range at GetMoisturePercentage, returned default value (0)");
+        return 0;
+    }
+
     return m_plantArr[id].moisturePercentage;
 }
 
 int Plants::GetThresholdPercentage(int id)
 {
+    if (IDOutOfRange(id))
+    {
+        Serial.println("WARNING: Plant ID out of range at GetThresholdPercentage, returned default value (0)");
+        return 0;
+    }
+
     return m_plantArr[id].thresholdPercentage;
 }
 
@@ -83,6 +94,12 @@ int Plants::GetThresholdPercentage(int id)
 
 void Plants::SetThresholdPercentage(int id, int percentage)
 {
+    if (IDOutOfRange(id))
+    {
+        Serial.println("WARNING: ID out of range");
+        return;
+    }
+
     // Validate percentage value.
 
     m_plantArr[id].thresholdPercentage = percentage;
@@ -95,6 +112,12 @@ void Plants::SetThresholdPercentage(int id, int percentage)
 
 void Plants::SetMoisturePercentage(int id, int percentage)
 {
+    if (IDOutOfRange(id))
+    {
+        Serial.println("WARNING: ID out of range");
+        return;
+    }
+
     // Validate percentage value.
 
     m_plantArr[id].moisturePercentage = percentage;
@@ -117,4 +140,9 @@ void Plants::CreateThresholdPercentageKey(int id, char *outKey)
 void Plants::CreateMoisturePercentageKey(int id, char *outKey)
 {
     sprintf(outKey, "plant%dmo", id);
+}
+
+bool Plants::IDOutOfRange(int id)
+{
+    return id < 0 || id >= PLANT_COUNT;
 }
